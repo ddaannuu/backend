@@ -123,20 +123,25 @@ $query_builder = TRUE;
 // );
 
 $db['default'] = array(
-'hostname' => 'mysql-technologia.mysql.database.azure.com',
-'username' => 'admintechnologia',
-'password' => '4kUc4hb4g03S',
-'database' => 'db_technologia',
-'dbdriver' => 'mysqli',
-'dbprefix' => '',
-'pconnect' => FALSE,
-'db_debug' => TRUE,
-'cache_on' => FALSE,
-'cachedir' => '',
-'char_set' => 'utf8',
-'dbcollat' => 'utf8_general_ci',
-'encrypt' => TRUE, // ← wajib diaktifkan
-'ssl_verify' => FALSE // ← boleh FALSE untuk sementara/testing
+    'dsn'           => '',
+    'hostname'      => 'mysql-technologia.mysql.database.azure.com', // GANTI DENGAN MILIKMU
+    'username'      => 'admintechnologia@mysql-technologia',               // GANTI DENGAN MILIKMU
+    'password'      => '4kUc4hb4g03S',                              // GANTI DENGAN MILIKMU
+    'database'      => 'db_technologia',                            // GANTI DENGAN MILIKMU
+    'dbdriver'      => 'mysqli',
+    'dbprefix'      => '',
+    'pconnect'      => FALSE,
+    'db_debug'      => (ENVIRONMENT !== 'production'),
+    'cache_on'      => FALSE,
+    'cachedir'      => '',
+    'char_set'      => 'utf8',
+    'dbcollat'      => 'utf8_general_ci',
+    'swap_pre'      => '',
+    'encrypt'       => TRUE,     // WAJIB ENABLE SSL
+    'ssl_verify'    => FALSE,    // UNTUK DEV TESTING, BISA DIUBAH JADI TRUE UNTUK PRODUKSI
+    'compress'      => FALSE,
+    'stricton'      => FALSE,
+    'failover'      => array(),
+    'save_queries'  => TRUE
 );
-
 
