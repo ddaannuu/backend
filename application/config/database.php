@@ -92,7 +92,9 @@ $db['default'] = array(
 	'compress' => FALSE,
 	'stricton' => FALSE,
 	'failover' => array(),
-	'save_queries' => TRUE
+	'save_queries' => TRUE,
+	'encrypt' => TRUE, // ← tambahkan ini
+	'ssl_verify' => FALSE, // opsional, TRUE kalau kamu pakai sertifikat
 );
 
 
