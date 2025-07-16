@@ -75,9 +75,9 @@ $query_builder = TRUE;
 
 $db['default'] = array(
 	'dsn'	=> '',
-	'hostname' => 'localhost',
-	'username' => 'root',
-	'password' => '',
+	'hostname' => 'mysql-technologia.mysql.database.azure.com',
+	'username' => 'admintechnologia@mysql-technologia',
+	'password' => '4kUc4hb4g03S',
 	'database' => 'db_technologia',
 	'dbdriver' => 'mysqli',
 	'dbprefix' => '',
