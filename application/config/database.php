@@ -94,7 +94,7 @@ $query_builder = TRUE;
 // 	'failover' => array(),
 // 	'save_queries' => TRUE,
 // 	'encrypt' => TRUE, // ← tambahkan ini
-// 	'ssl_verify' => FALSE, // opsional, TRUE kalau kamu pakai sertifikat
+// 	'ssl_verify' => FALSE, // opsional, TRUE kalau kamu pakai sertifikatdd
 // );
 
 // $db['default'] = array(
