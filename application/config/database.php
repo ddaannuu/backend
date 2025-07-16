@@ -124,7 +124,7 @@ $query_builder = TRUE;
 
 $db['default'] = array(
 'hostname' => 'mysql-technologia.mysql.database.azure.com',
-'username' => 'admintechnologia',
+'username' => 'admintechnologiaaaa',
 'password' => '4kUc4hb4g03S',
 'database' => 'db_technologia',
 'dbdriver' => 'mysqli',
