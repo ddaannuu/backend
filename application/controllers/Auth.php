@@ -12,7 +12,9 @@ class Auth extends CI_Controller {
         $this->load->database();
         $this->load->library('session');
 
-        header("Access-Control-Allow-Origin: http://localhost:5173");
+
+		
+        header("Access-Control-Allow-Origin: https://nice-flower-0c59cd800.1.azurestaticapps.net");
         header("Access-Control-Allow-Methods: POST, GET, OPTIONS");
         header("Access-Control-Allow-Headers: Content-Type, Authorization");
         header("Access-Control-Allow-Credentials: true");

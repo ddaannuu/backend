@@ -6,7 +6,7 @@ class Products extends CI_Controller {
     public function __construct() {
         parent::__construct();
         $this->load->model('Product_model');
-    header("Access-Control-Allow-Origin: http://localhost:5173");
+    header("Access-Control-Allow-Origin: https://nice-flower-0c59cd800.1.azurestaticapps.net");
     header("Access-Control-Allow-Credentials: true");
     header("Access-Control-Allow-Methods: GET, POST, OPTIONS");
     header("Access-Control-Allow-Headers: Content-Type");
@@ -378,7 +378,7 @@ public function delete_on_sale($id) {
 
 public function get_by_id($id)
 {
-    header("Access-Control-Allow-Origin: http://localhost:5173");
+    header("Access-Control-Allow-Origin: https://nice-flower-0c59cd800.1.azurestaticapps.net");
     header("Access-Control-Allow-Credentials: true");
     header("Access-Control-Allow-Methods: GET, OPTIONS");
     header("Access-Control-Allow-Headers: Content-Type, Authorization");
@@ -400,7 +400,7 @@ public function get_by_id($id)
 
 public function update($id)
 {
-    header("Access-Control-Allow-Origin: http://localhost:5173");
+    header("Access-Control-Allow-Origin: https://nice-flower-0c59cd800.1.azurestaticapps.net");
     header("Access-Control-Allow-Credentials: true");
     header("Access-Control-Allow-Methods: POST, OPTIONS");
     header("Access-Control-Allow-Headers: Content-Type, Authorization");
@@ -440,7 +440,7 @@ public function update($id)
 }
 
 public function get_product_api($id) {
-    header("Access-Control-Allow-Origin: http://localhost:5173");
+    header("Access-Control-Allow-Origin: https://nice-flower-0c59cd800.1.azurestaticapps.net");
     header("Access-Control-Allow-Methods: GET, OPTIONS");
     header("Access-Control-Allow-Headers: Content-Type");
     header("Access-Control-Allow-Credentials: true");
@@ -452,7 +452,7 @@ public function get_product_api($id) {
 }
 
 public function update_product_api($id) {
-    header("Access-Control-Allow-Origin: http://localhost:5173");
+    header("Access-Control-Allow-Origin: https://nice-flower-0c59cd800.1.azurestaticapps.net");
     header("Access-Control-Allow-Methods: POST, OPTIONS");
     header("Access-Control-Allow-Headers: Content-Type");
     header("Access-Control-Allow-Credentials: true");
@@ -484,7 +484,7 @@ public function update_product_api($id) {
 }
 
 public function update_on_sale_api($id) {
-    header("Access-Control-Allow-Origin: http://localhost:5173");
+    header("Access-Control-Allow-Origin: https://nice-flower-0c59cd800.1.azurestaticapps.net");
     header("Access-Control-Allow-Credentials: true");
     header("Access-Control-Allow-Methods: POST, OPTIONS");
     header("Access-Control-Allow-Headers: Content-Type");
@@ -518,7 +518,7 @@ public function update_on_sale_api($id) {
 }
 
 public function get_on_sale_by_id_api($id) {
-    header("Access-Control-Allow-Origin: http://localhost:5173");
+    header("Access-Control-Allow-Origin: https://nice-flower-0c59cd800.1.azurestaticapps.net");
     header("Access-Control-Allow-Credentials: true");
     header("Access-Control-Allow-Methods: GET, POST, OPTIONS");
     header("Access-Control-Allow-Headers: Content-Type");
@@ -538,7 +538,7 @@ public function get_on_sale_by_id_api($id) {
 
 // Ambil detail produk best seller berdasarkan ID (GET)
 public function get_best_seller_by_id($id) {
-    header("Access-Control-Allow-Origin: http://localhost:5173");
+    header("Access-Control-Allow-Origin: https://nice-flower-0c59cd800.1.azurestaticapps.net");
     header("Access-Control-Allow-Credentials: true");
     header("Content-Type: application/json");
 
@@ -552,7 +552,7 @@ public function get_best_seller_by_id($id) {
 
 // Update produk best seller berdasarkan ID (POST)
 public function update_best_seller($id) {
-    header("Access-Control-Allow-Origin: http://localhost:5173");
+    header("Access-Control-Allow-Origin: https://nice-flower-0c59cd800.1.azurestaticapps.net");
     header("Access-Control-Allow-Credentials: true");
     header("Access-Control-Allow-Headers: Content-Type");
     header("Access-Control-Allow-Methods: POST, OPTIONS");
