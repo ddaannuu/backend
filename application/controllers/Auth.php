@@ -7,6 +7,26 @@ class Auth extends CI_Controller {
     private $max_failed_attempts = 5;  
     private $lockout_time = 60;  
 
+	// ✅ Tambahkan ini di dalam class Auth (tapi di luar fungsi lain)
+	private function setCORSHeaders() {
+		$allowed_origins = [
+			'http://localhost:5173',
+			'https://nice-flower-0c59cd800.1.azurestaticapps.net'
+		];
+
+		$origin = $_SERVER['HTTP_ORIGIN'] ?? '';
+
+		// ✅ Hanya izinkan origin tertentu
+		if (in_array($origin, $allowed_origins)) {
+			header("Access-Control-Allow-Origin: $origin");
+			header("Access-Control-Allow-Credentials: true");
+			header("Access-Control-Allow-Methods: POST, GET, OPTIONS");
+			header("Access-Control-Allow-Headers: Content-Type, Authorization, X-Requested-With");
+			header("Content-Type: application/json");
+		}
+	}
+
+
     public function __construct() {
 		parent::__construct();
 		$this->load->database();
@@ -19,38 +39,15 @@ class Auth extends CI_Controller {
 		];
 
 		// Cek apakah origin masuk daftar yang diizinkan
-		$origin = $_SERVER['HTTP_ORIGIN'] ?? '';
-		if (in_array($origin, $allowed_origins)) {
-			header("Access-Control-Allow-Origin: $origin");
-			header("Access-Control-Allow-Credentials: true");
-			header("Access-Control-Allow-Methods: POST, GET, OPTIONS");
-			header("Access-Control-Allow-Headers: Content-Type, Authorization, X-Requested-With");
-			header("Content-Type: application/json");
-		}
-
-		// Tangani request OPTIONS (preflight)
-		if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
-			http_response_code(200);
-			exit();
-		}
+		
+		
 	}
 
 
 
     public function login_api() {
-		$allowed_origins = [
-			'http://localhost:5173',
-			'https://nice-flower-0c59cd800.1.azurestaticapps.net'
-		];
 
-		$origin = $_SERVER['HTTP_ORIGIN'] ?? '';
-		if (in_array($origin, $allowed_origins)) {
-			header("Access-Control-Allow-Origin: $origin");
-			header("Access-Control-Allow-Credentials: true");
-			header("Access-Control-Allow-Methods: POST, GET, OPTIONS");
-			header("Access-Control-Allow-Headers: Content-Type, Authorization, X-Requested-With");
-			header("Content-Type: application/json");
-		}
+		 $this->setCORSHeaders();
 
 		if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
 			http_response_code(200);
@@ -199,6 +196,9 @@ class Auth extends CI_Controller {
     }
 
     public function logout_api() {
+
+		 $this->setCORSHeaders();
+
         if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
             exit(0);
         }
