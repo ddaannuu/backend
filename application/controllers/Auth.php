@@ -38,9 +38,24 @@ class Auth extends CI_Controller {
 
 
     public function login_api() {
-        if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
-            exit(0);
-        }
+		$allowed_origins = [
+			'http://localhost:5173',
+			'https://nice-flower-0c59cd800.1.azurestaticapps.net'
+		];
+
+		$origin = $_SERVER['HTTP_ORIGIN'] ?? '';
+		if (in_array($origin, $allowed_origins)) {
+			header("Access-Control-Allow-Origin: $origin");
+			header("Access-Control-Allow-Credentials: true");
+			header("Access-Control-Allow-Methods: POST, GET, OPTIONS");
+			header("Access-Control-Allow-Headers: Content-Type, Authorization, X-Requested-With");
+			header("Content-Type: application/json");
+		}
+
+		if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
+			http_response_code(200);
+			exit();
+		}
 
         $data = json_decode(file_get_contents("php://input"), true);
 
