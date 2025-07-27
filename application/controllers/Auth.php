@@ -7,52 +7,24 @@ class Auth extends CI_Controller {
     private $max_failed_attempts = 5;  
     private $lockout_time = 60;  
 
-	// ✅ Tambahkan ini di dalam class Auth (tapi di luar fungsi lain)
-	private function setCORSHeaders() {
-		$allowed_origins = [
-			'http://localhost:5173',
-			'https://nice-flower-0c59cd800.1.azurestaticapps.net'
-		];
-
-		$origin = $_SERVER['HTTP_ORIGIN'] ?? '';
-
-		// ✅ Hanya izinkan origin tertentu
-		if (in_array($origin, $allowed_origins)) {
-			header("Access-Control-Allow-Origin: $origin");
-			header("Access-Control-Allow-Credentials: true");
-			header("Access-Control-Allow-Methods: POST, GET, OPTIONS");
-			header("Access-Control-Allow-Headers: Content-Type, Authorization, X-Requested-With");
-			header("Content-Type: application/json");
-		}
-	}
-
-
     public function __construct() {
-		parent::__construct();
-		$this->load->database();
-		$this->load->library('session');
+        parent::__construct();
+        $this->load->database();
+        $this->load->library('session');
 
-		// Daftar domain frontend yang diizinkan
-		$allowed_origins = [
-			'http://localhost:5173',
-			'https://nice-flower-0c59cd800.1.azurestaticapps.net'
-		];
 
-		// Cek apakah origin masuk daftar yang diizinkan
 		
-		
-	}
-
-
+        header("Access-Control-Allow-Origin: https://nice-flower-0c59cd800.1.azurestaticapps.net");
+        header("Access-Control-Allow-Methods: POST, GET, OPTIONS");
+        header("Access-Control-Allow-Headers: Content-Type, Authorization");
+        header("Access-Control-Allow-Credentials: true");
+        header("Content-Type: application/json");
+    }
 
     public function login_api() {
-
-		 $this->setCORSHeaders();
-
-		if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
-			http_response_code(200);
-			exit();
-		}
+        if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
+            exit(0);
+        }
 
         $data = json_decode(file_get_contents("php://input"), true);
 
@@ -196,9 +168,6 @@ class Auth extends CI_Controller {
     }
 
     public function logout_api() {
-
-		 $this->setCORSHeaders();
-
         if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
             exit(0);
         }
