@@ -90,6 +90,19 @@ class Auth extends CI_Controller {
         }
     }
 
+	 public function logout_api() {
+        if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
+            exit(0);
+        }
+
+        $this->session->sess_destroy();
+
+        echo json_encode([
+            'status' => true,
+            'message' => 'Logout berhasil'
+        ]);
+    }
+
     private function isLockedOut($username) {
         $attempts = $this->session->userdata('failed_attempts_' . $username);
         $last_failed_time = $this->session->userdata('last_failed_time_' . $username);
@@ -123,4 +136,6 @@ class Auth extends CI_Controller {
     private function getFailedAttempts($username) {
         return $this->session->userdata('failed_attempts_' . $username) ?? 0;
     }
+
+	
 }
