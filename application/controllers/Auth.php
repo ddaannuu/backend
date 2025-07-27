@@ -29,8 +29,11 @@ class Auth extends CI_Controller {
             header("Access-Control-Allow-Credentials: true");
             exit(0);
         }
+		$data_raw = file_get_contents("php://input");
+		log_message('debug', 'DATA RAW: ' . $data_raw);
+		$data = json_decode($data_raw, true);
 
-        $data = json_decode(file_get_contents("php://input"), true);
+        // $data = json_decode(file_get_contents("php://input"), true);
 
         $username = trim($data['username'] ?? '');
         $password = trim($data['password'] ?? '');
