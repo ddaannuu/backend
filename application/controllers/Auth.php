@@ -8,18 +8,33 @@ class Auth extends CI_Controller {
     private $lockout_time = 60;  
 
     public function __construct() {
-        parent::__construct();
-        $this->load->database();
-        $this->load->library('session');
+    parent::__construct();
+    $this->load->database();
+    $this->load->library('session');
 
+    // Daftar domain frontend yang diizinkan
+    $allowed_origins = [
+        'http://localhost:5173',
+        'https://nice-flower-0c59cd800.1.azurestaticapps.net'
+    ];
 
-		
-        header("Access-Control-Allow-Origin: https://nice-flower-0c59cd800.1.azurestaticapps.net");
-        header("Access-Control-Allow-Methods: POST, GET, OPTIONS");
-        header("Access-Control-Allow-Headers: Content-Type, Authorization");
-        header("Access-Control-Allow-Credentials: true");
-        header("Content-Type: application/json");
+    // Cek apakah origin masuk daftar yang diizinkan
+    if (isset($_SERVER['HTTP_ORIGIN']) && in_array($_SERVER['HTTP_ORIGIN'], $allowed_origins)) {
+        header("Access-Control-Allow-Origin: " . $_SERVER['HTTP_ORIGIN']);
     }
+
+    header("Access-Control-Allow-Methods: POST, GET, OPTIONS");
+    header("Access-Control-Allow-Headers: Content-Type, Authorization");
+    header("Access-Control-Allow-Credentials: true");
+    header("Content-Type: application/json");
+
+    // Tangani request OPTIONS (preflight)
+    if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
+        http_response_code(200);
+        exit();
+    }
+}
+
 
     public function login_api() {
         if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
