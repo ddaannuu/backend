@@ -177,6 +177,12 @@ class Users extends CI_Controller {
 
 	public function list_api() {
     // Tangani preflight CORS
+	// WAJIB tambahkan di awal function list_api
+		header("Access-Control-Allow-Origin: https://nice-flower-0c59cd800.1.azurestaticapps.net");
+		header("Access-Control-Allow-Credentials: true");
+		header("Access-Control-Allow-Methods: GET, POST, OPTIONS");
+		header("Access-Control-Allow-Headers: Content-Type, Authorization");
+
 		if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
 			header("Access-Control-Allow-Origin: https://nice-flower-0c59cd800.1.azurestaticapps.net");
 			header("Access-Control-Allow-Credentials: true");
