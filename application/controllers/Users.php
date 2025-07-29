@@ -204,53 +204,55 @@ class Users extends CI_Controller {
 
 
 	public function create_api()
-	{
-			if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
-			header("Access-Control-Allow-Origin: https://nice-flower-0c59cd800.1.azurestaticapps.net");
-			header("Access-Control-Allow-Methods: POST, OPTIONS");
-			header("Access-Control-Allow-Headers: Content-Type");
-			header("Access-Control-Allow-Credentials: true");
-			exit(0);
-		}
+{
+    if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
+        header("Access-Control-Allow-Origin: https://nice-flower-0c59cd800.1.azurestaticapps.net");
+        header("Access-Control-Allow-Methods: POST, OPTIONS");
+        header("Access-Control-Allow-Headers: Content-Type, Authorization");
+        header("Access-Control-Allow-Credentials: true");
+        http_response_code(200);
+        exit;
+    }
 
-		header("Access-Control-Allow-Origin: https://nice-flower-0c59cd800.1.azurestaticapps.net");
-		header("Access-Control-Allow-Credentials: true");
-		header("Content-Type: application/json");
+    header("Access-Control-Allow-Origin: https://nice-flower-0c59cd800.1.azurestaticapps.net");
+    header("Access-Control-Allow-Credentials: true");
+    header("Access-Control-Allow-Headers: Content-Type, Authorization");
+    header("Access-Control-Allow-Methods: POST, OPTIONS");
+    header("Content-Type: application/json");
 
+    $data = json_decode(file_get_contents('php://input'), true);
+    $errors = [];
 
-		$data = json_decode(file_get_contents('php://input'), true);
-		$errors = [];
+    if (empty($data['username']))      $errors[] = 'Username wajib diisi.';
+    if (empty($data['nama_lengkap']))  $errors[] = 'Nama lengkap wajib diisi.';
+    if (empty($data['email']))         $errors[] = 'Email wajib diisi.';
+    if (empty($data['password']))      $errors[] = 'Password wajib diisi.';
+    if (empty($data['role']))          $errors[] = 'Role wajib dipilih.';
 
-		if (empty($data['username']))      $errors[] = 'Username wajib diisi.';
-		if (empty($data['nama_lengkap']))  $errors[] = 'Nama lengkap wajib diisi.';
-		if (empty($data['email']))         $errors[] = 'Email wajib diisi.';
-		if (empty($data['password']))      $errors[] = 'Password wajib diisi.';
-		if (empty($data['role']))          $errors[] = 'Role wajib dipilih.';
+    if (!empty($errors)) {
+        echo json_encode(['status' => false, 'message' => implode(' ', $errors)]);
+        return;
+    }
 
-		if (!empty($errors)) {
-			echo json_encode(['status' => false, 'message' => implode(' ', $errors)]);
-			return;
-		}
+    if ($this->User_model->username_exists($data['username'])) {
+        echo json_encode(['status' => false, 'message' => 'Username sudah digunakan.']);
+        return;
+    }
 
-		// Cek username unik
-		$this->load->model('User_model');
-		if ($this->User_model->username_exists($data['username'])) {
-			echo json_encode(['status' => false, 'message' => 'Username sudah digunakan.']);
-			return;
-		}
+    $data_insert = [
+        'username'     => $data['username'],
+        'nama_lengkap' => $data['nama_lengkap'],
+        'email'        => $data['email'],
+        'password'     => password_hash($data['password'], PASSWORD_DEFAULT),
+        'role'         => $data['role'],
+        'created_at'   => date('Y-m-d H:i:s')
+    ];
 
-		$data_insert = [
-			'username'     => $data['username'],
-			'nama_lengkap' => $data['nama_lengkap'],
-			'email'        => $data['email'],
-			'password'     => password_hash($data['password'], PASSWORD_DEFAULT),
-			'role'         => $data['role']
-		];
+    $this->db->insert('users', $data_insert);
 
-		$this->db->insert('users', $data_insert);
+    echo json_encode(['status' => true, 'message' => 'User berhasil ditambahkan.']);
+}
 
-		echo json_encode(['status' => true, 'message' => 'User berhasil ditambahkan.']);
-	}
 
 	public function get_user($id)
 	{
