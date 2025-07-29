@@ -7,11 +7,15 @@ class Users extends CI_Controller {
 		parent::__construct();
 		$this->load->model('User_model');
 		$this->load->helper('auth_check');
+		$api_methods = ['list_api', 'create_api', 'update_user_api', 'get_user_by_id_api', 'delete_user_api'];
+		if (!in_array($this->router->method, $api_methods)) {
+			require_login();  // Hanya untuk metode selain API
+		}
 
 		// Jalankan hanya jika bukan API
-		if (strpos($_SERVER['REQUEST_URI'], 'api') === false) {
-			require_login();
-		}
+		// if (strpos($_SERVER['REQUEST_URI'], 'api') === false) {
+		// 	require_login();
+		// }
 	}
 
 
