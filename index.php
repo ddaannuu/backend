@@ -1,5 +1,14 @@
 <?php
 
+// CORS Global untuk semua API
+if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
+    header("Access-Control-Allow-Origin: https://nice-flower-0c59cd800.1.azurestaticapps.net");
+    header("Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS");
+    header("Access-Control-Allow-Headers: Content-Type, Authorization");
+    header("Access-Control-Allow-Credentials: true");
+    http_response_code(200);
+    exit;
+}
 
 /**
  * CodeIgniter

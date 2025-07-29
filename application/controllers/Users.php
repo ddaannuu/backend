@@ -176,7 +176,7 @@ class Users extends CI_Controller {
 
 
 	public function list_api() {
-    // 🔧 Tangani preflight (OPTIONS)
+    // Tangani preflight CORS (OPTIONS)
     if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
         header("Access-Control-Allow-Origin: https://nice-flower-0c59cd800.1.azurestaticapps.net");
         header("Access-Control-Allow-Credentials: true");
@@ -186,13 +186,14 @@ class Users extends CI_Controller {
         exit;
     }
 
-    // 🔧 Header utama
+    // Header CORS utama
     header("Access-Control-Allow-Origin: https://nice-flower-0c59cd800.1.azurestaticapps.net");
     header("Access-Control-Allow-Credentials: true");
     header("Access-Control-Allow-Methods: GET, POST, OPTIONS");
     header("Access-Control-Allow-Headers: Content-Type, Authorization");
     header("Content-Type: application/json");
 
+    // Ambil data
     $users = $this->User_model->get_all_users();
 
     echo json_encode([
@@ -200,6 +201,7 @@ class Users extends CI_Controller {
         'data' => $users
     ]);
 }
+
 
 
 
