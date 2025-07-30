@@ -375,39 +375,29 @@ public function update_user_api($id) {
         'message' => $updated ? 'User berhasil diperbarui.' : 'Gagal memperbarui user.'
     ]);
 }
-public function delete_user_api($id) {
+public function delete_user_api($id)
+{
     header("Access-Control-Allow-Origin: https://nice-flower-0c59cd800.1.azurestaticapps.net");
     header("Access-Control-Allow-Credentials: true");
     header("Access-Control-Allow-Methods: DELETE, OPTIONS");
-    header("Access-Control-Allow-Headers: Content-Type, Authorization");
-    header("Content-Type: application/json");
+    header("Access-Control-Allow-Headers: Content-Type, Authorization, X-Requested-With");
 
-    // Untuk preflight OPTIONS
-    if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
-        http_response_code(200);
-        exit;
+    // Untuk menangani preflight OPTIONS
+    if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
+        exit(0);
     }
 
-    // Cegah hapus diri sendiri (gunakan session user_id jika tersedia)
-    if ($this->session->userdata('user_id') == $id) {
-        echo json_encode(['status' => false, 'message' => 'Tidak dapat menghapus akun sendiri.']);
-        return;
-    }
-
+    // Logic hapus user
     $this->load->model('User_model');
-    $user = $this->User_model->get_user_by_id($id);
+    $deleted = $this->User_model->delete_user($id);
 
-    if (!$user) {
-        echo json_encode(['status' => false, 'message' => 'User tidak ditemukan.']);
-        return;
-    }
-
-    if ($this->User_model->delete_user($id)) {
-        echo json_encode(['status' => true, 'message' => 'User berhasil dihapus.']);
+    if ($deleted) {
+        echo json_encode(['status' => true]);
     } else {
-        echo json_encode(['status' => false, 'message' => 'Gagal menghapus user.']);
+        echo json_encode(['status' => false, 'message' => 'Gagal menghapus user']);
     }
 }
+
 
 
 
