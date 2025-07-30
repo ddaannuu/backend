@@ -177,6 +177,10 @@ class Users extends CI_Controller {
 
 public function list_api() {
     // Tangani preflight dulu
+	header("Access-Control-Allow-Origin: https://nice-flower-0c59cd800.1.azurestaticapps.net");
+    header("Access-Control-Allow-Credentials: true");
+    header("Content-Type: application/json");
+
     if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
         header("Access-Control-Allow-Origin: https://nice-flower-0c59cd800.1.azurestaticapps.net");
         header("Access-Control-Allow-Methods: GET, POST, OPTIONS");
@@ -187,9 +191,7 @@ public function list_api() {
     }
 
     // Respons utama
-    header("Access-Control-Allow-Origin: https://nice-flower-0c59cd800.1.azurestaticapps.net");
-    header("Access-Control-Allow-Credentials: true");
-    header("Content-Type: application/json");
+
 
     $users = $this->User_model->get_all_users();
 
