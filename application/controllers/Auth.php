@@ -3,7 +3,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Auth extends CI_Controller {
 
-	private $recaptcha_secret = '6Lc7l5ArAAAAAOCdiiUV2KLt4boMjXgrRyPhIguu'; 
+	
     private $max_failed_attempts = 5;  
     private $lockout_time = 60;  
 
@@ -38,9 +38,6 @@ class Auth extends CI_Controller {
 
         $username = trim($data['username'] ?? '');
         $password = trim($data['password'] ?? '');
-		$captcha_response = $data['g-recaptcha-response'] ?? '';
-
-
 
         if (empty($username) || empty($password)) {
             echo json_encode(['status' => false, 'message' => 'Username dan password wajib diisi']);
@@ -55,22 +52,6 @@ class Auth extends CI_Controller {
             ]);
             return;
         }
-
-		 if (empty($captcha_response)) {
-            echo json_encode(['status' => false, 'message' => 'Verifikasi CAPTCHA diperlukan']);
-            return;
-        }
-
-        // Verifikasi reCAPTCHA v2 dengan POST request
-        $verify_response = $this->verify_recaptcha($captcha_response);
-
-        if (!$verify_response['success']) {
-            echo json_encode(['status' => false, 'message' => 'Verifikasi CAPTCHA gagal']);
-            return;
-        }
-
-        // Validasi user
-        $this->load->model('User_model');
 
         $user = $this->User_model->get_by_username($username);
 
@@ -110,26 +91,6 @@ class Auth extends CI_Controller {
         }
     }
 
-	private function verify_recaptcha($token) {
-        $url = 'https://www.google.com/recaptcha/api/siteverify';
-        $data = [
-            'secret' => $this->recaptcha_secret,
-            'response' => $token,
-            'remoteip' => $_SERVER['REMOTE_ADDR'] ?? ''
-        ];
-
-        $ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL, $url);
-        curl_setopt($ch, CURLOPT_POST, true);
-        curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($data));
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        $response = curl_exec($ch);
-        curl_close($ch);
-
-        return json_decode($response, true);
-    }
-
-
 	 public function logout_api() {
         if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
             exit(0);
@@ -142,31 +103,6 @@ class Auth extends CI_Controller {
             'message' => 'Logout berhasil'
         ]);
     }
-
-	 private function getFailedAttempts($username) {
-        $failed = $this->session->userdata("failed_login_{$username}");
-        return $failed['count'] ?? 0;
-    }
-
-    private function getLastFailedTime($username) {
-        $failed = $this->session->userdata("failed_login_{$username}");
-        return $failed['last_time'] ?? 0;
-    }
-
-    private function addFailedAttempt($username) {
-        $failed = $this->session->userdata("failed_login_{$username}");
-        $count = $failed['count'] ?? 0;
-        $count++;
-        $this->session->set_userdata("failed_login_{$username}", [
-            'count' => $count,
-            'last_time' => time()
-        ]);
-    }
-
-    private function clearFailedAttempts($username) {
-        $this->session->unset_userdata("failed_login_{$username}");
-    }
-
 
     private function isLockedOut($username) {
         $attempts = $this->session->userdata('failed_attempts_' . $username);
