@@ -1,5 +1,11 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
+$hook['post_system'][] = array(
+    'class'    => 'SetCookieHeader',
+    'function' => 'fix_cookie_header',
+    'filename' => 'SetCookieHeader.php',
+    'filepath' => 'hooks'
+);
 
 /*
 | -------------------------------------------------------------------------
