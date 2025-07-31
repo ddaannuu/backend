@@ -282,7 +282,7 @@ echo json_encode([
             $filename = time() . '_' . basename($_FILES[$field_name]['name']);
             $target_path = $upload_path . $filename;
             if (move_uploaded_file($_FILES[$field_name]['tmp_name'], $target_path)) {
-                return '/Images/' . $filename;
+                return '/uploads/' . $filename;
             } else {
                 $errors[] = "Gagal mengupload $label.";
             }
