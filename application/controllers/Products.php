@@ -56,6 +56,14 @@ class Products extends CI_Controller {
     echo json_encode($response);
 }
 public function create_form() {
+	if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
+        header("Access-Control-Allow-Origin: https://nice-flower-0c59cd800.1.azurestaticapps.net");
+        header("Access-Control-Allow-Credentials: true");
+        header("Access-Control-Allow-Methods: GET, POST, OPTIONS");
+        header("Access-Control-Allow-Headers: Content-Type");
+        header("Content-Type: application/json");
+        exit(0);
+    }
     header('Content-Type: application/json');
     $errors = [];
     $success = false;
