@@ -81,7 +81,7 @@ public function create_form() {
 		// log_message('error', 'UPLOAD DEBUG: ' . dirname(APPPATH) . '/../vue-project/public/Images/');
 
 	
-		$upload_dir = FCPATH . '../uploads/';
+		$upload_dir = FCPATH . 'uploads/';
 
 
 
