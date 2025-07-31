@@ -80,7 +80,7 @@ public function create_form() {
         $description = $this->input->post('description');
 		log_message('error', 'UPLOAD DEBUG: ' . dirname(APPPATH) . '/../vue-project/public/Images/');
 
-		$upload_dir = realpath(dirname(FCPATH) . '/vue-project/public/Images/') . '/';
+		$upload_dir = realpath(dirname(FCPATH) . 'vue-project\public\Images') . '/';
 
 
 
