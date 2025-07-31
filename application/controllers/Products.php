@@ -78,6 +78,8 @@ public function create_form() {
         $category    = $this->input->post('category');
         $buy_link    = $this->input->post('buy_link');
         $description = $this->input->post('description');
+		log_message('error', 'UPLOAD DEBUG: ' . dirname(APPPATH) . '/../vue-project/public/Images/');
+
         $upload_dir  = realpath(dirname(APPPATH) . '/../vue-project/public/Images/') . '/';
 
         $image_1 = $this->_upload_file('image_1_file', $upload_dir, $errors, 'Gambar 1');
