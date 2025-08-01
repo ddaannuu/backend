@@ -56,7 +56,8 @@ class Products extends CI_Controller {
     echo json_encode($response);
 }
 public function create_form() {
-	if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
+    // Handle preflight OPTIONS request (CORS)
+    if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
         header("Access-Control-Allow-Origin: https://nice-flower-0c59cd800.1.azurestaticapps.net");
         header("Access-Control-Allow-Credentials: true");
         header("Access-Control-Allow-Methods: GET, POST, OPTIONS");
@@ -64,7 +65,12 @@ public function create_form() {
         header("Content-Type: application/json");
         exit(0);
     }
-    header('Content-Type: application/json');
+
+    // Allow CORS for actual request
+    header("Access-Control-Allow-Origin: https://nice-flower-0c59cd800.1.azurestaticapps.net");
+    header("Access-Control-Allow-Credentials: true");
+    header("Content-Type: application/json");
+
     $errors = [];
     $success = false;
 
@@ -78,23 +84,22 @@ public function create_form() {
         $category    = $this->input->post('category');
         $buy_link    = $this->input->post('buy_link');
         $description = $this->input->post('description');
-		// log_message('error', 'UPLOAD DEBUG: ' . dirname(APPPATH) . '/../vue-project/public/Images/');
 
-	
-		$upload_dir = FCPATH . 'uploads/';
+        // Folder tujuan upload
+        $upload_dir = FCPATH . 'uploads/';
 
-
-
-
+        // Upload file
         $image_1 = $this->_upload_file('image_1_file', $upload_dir, $errors, 'Gambar 1');
         $image_2 = $this->_upload_file('image_2_file', $upload_dir, $errors, 'Gambar 2');
         $image_3 = $this->_upload_file('image_3_file', $upload_dir, $errors, 'Gambar 3');
         $qr_code = $this->_upload_file('qr_code_file', $upload_dir, $errors, 'QR Code');
 
+        // Validasi gambar utama wajib diisi
         if (empty($image_1)) {
             $errors[] = "Gambar 1 wajib diupload.";
         }
 
+        // Jika tidak ada error, insert ke DB
         if (empty($errors)) {
             $data = [
                 'slug'        => $slug,
@@ -116,6 +121,7 @@ public function create_form() {
             $id = $this->db->insert_id();
             $success = true;
 
+            // Tambahkan ke tabel best_seller atau on_sale jika diperlukan
             $is_best_seller = $this->input->post('is_best_seller');
             $is_on_sale     = $this->input->post('is_on_sale');
 
@@ -127,18 +133,22 @@ public function create_form() {
                 $this->Product_model->insert_on_sale($id);
             }
 
-            if ($is_best_seller || $is_on_sale) {
+            // Jika tidak termasuk kategori khusus, hapus
+            if (!$is_best_seller && !$is_on_sale) {
                 $this->db->delete('products', ['id' => $id]);
+                $success = false;
+                $errors[] = 'Produk tidak dimasukkan ke kategori manapun.';
             }
         }
     }
-header('Content-Type: application/json');
-echo json_encode([
-    'success' => $success,
-    'errors' => $errors
-]);
 
+    // Kirim response JSON
+    echo json_encode([
+        'success' => $success,
+        'errors' => $errors
+    ]);
 }
+
 
 
 
@@ -277,18 +287,26 @@ echo json_encode([
     }
 
     // Helper upload file
-    private function _upload_file($field_name, $upload_path, &$errors, $label) {
-        if (isset($_FILES[$field_name]) && $_FILES[$field_name]['error'] === UPLOAD_ERR_OK) {
-            $filename = time() . '_' . basename($_FILES[$field_name]['name']);
-            $target_path = $upload_path . $filename;
-            if (move_uploaded_file($_FILES[$field_name]['tmp_name'], $target_path)) {
-                return '/uploads/' . $filename;
-            } else {
-                $errors[] = "Gagal mengupload $label.";
-            }
-        }
+    private function _upload_file($field_name, $upload_dir, &$errors, $label) {
+    if (!isset($_FILES[$field_name]) || $_FILES[$field_name]['error'] === 4) {
+        return ''; // Tidak diupload
+    }
+
+    $config['upload_path']   = $upload_dir;
+    $config['allowed_types'] = 'jpg|jpeg|png|webp';
+    $config['max_size']      = 2048; // max 2MB
+    $config['file_name']     = time() . '_' . $_FILES[$field_name]['name'];
+
+    $this->load->library('upload', $config);
+
+    if (!$this->upload->do_upload($field_name)) {
+        $errors[] = "Gagal upload $label: " . $this->upload->display_errors('', '');
         return '';
     }
+
+    return $this->upload->data('file_name');
+}
+
 
 	// EDIT BEST SELLER
 public function edit_best_seller($id) {
