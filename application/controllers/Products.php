@@ -150,6 +150,31 @@ public function create_form() {
 }
 
 
+private function _upload_file($field_name, $upload_dir, &$errors, $label) {
+    // Cek apakah file dikirim
+    if (!isset($_FILES[$field_name]) || $_FILES[$field_name]['error'] !== UPLOAD_ERR_OK) {
+        return '';
+    }
+
+    // Konfigurasi upload
+    $config['upload_path']   = $upload_dir;
+    $config['allowed_types'] = 'jpg|jpeg|png|webp|gif';
+    $config['max_size']      = 2048; // Dalam KB
+    $config['encrypt_name']  = TRUE;
+
+    $this->load->library('upload', $config);
+
+    // Inisialisasi ulang (penting jika upload lebih dari 1 file)
+    $this->upload->initialize($config);
+
+    if (!$this->upload->do_upload($field_name)) {
+        $errors[] = "Gagal upload {$label}: " . strip_tags($this->upload->display_errors());
+        return '';
+    }
+
+    $upload_data = $this->upload->data();
+    return $upload_data['file_name'];
+}
 
 
 
@@ -287,25 +312,6 @@ public function create_form() {
     }
 
     // Helper upload file
-    private function _upload_file($field_name, $upload_dir, &$errors, $label) {
-    if (!isset($_FILES[$field_name]) || $_FILES[$field_name]['error'] === 4) {
-        return ''; // Tidak diupload
-    }
-
-    $config['upload_path']   = $upload_dir;
-    $config['allowed_types'] = 'jpg|jpeg|png|webp';
-    $config['max_size']      = 2048; // max 2MB
-    $config['file_name']     = time() . '_' . $_FILES[$field_name]['name'];
-
-    $this->load->library('upload', $config);
-
-    if (!$this->upload->do_upload($field_name)) {
-        $errors[] = "Gagal upload $label: " . $this->upload->display_errors('', '');
-        return '';
-    }
-
-    return $this->upload->data('file_name');
-}
 
 
 	// EDIT BEST SELLER
